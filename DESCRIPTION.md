@@ -1,11 +1,9 @@
 # string-cluster
 
-
-
 ## Install
 
 ```bash
-pip install stringcluster
+pip install git+https://github.com/chris-santiago/stringcluster.git
 ```
 
 ## Documentation 
