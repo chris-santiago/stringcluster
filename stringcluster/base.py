@@ -6,11 +6,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
-STOP_TOKENS = '[\W_]+|(corporation$)|(corp.$)|(corp$)|(incorporated$)|(inc.$)|(inc$)|(company$)|(common$)|(com$)'
+STOP_TOKENS = r'[\W_]+|(corporation$)|(corp.$)|(corp$)|(incorporated$)|(inc.$)|(inc$)|(company$)|(common$)|(com$)'
 
 
 class StringCluster(BaseEstimator, TransformerMixin):
-    def __init__(self, ngram_size: int = 2, threshold: float = 0.8, stop_tokens: str = '[\W_]+'):
+    def __init__(self, ngram_size: int = 2, threshold: float = 0.8, stop_tokens: str = r'[\W_]+'):
         self.ngram_size = ngram_size
         self.threshold = threshold
         self.stop_tokens = re.compile(stop_tokens)
