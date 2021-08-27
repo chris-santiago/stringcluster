@@ -7,7 +7,6 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-from sklearn.utils.validation import check_is_fitted
 
 STOP_TOKENS = r'[\W_]+|(corporation$)|(corp.$)|(corp$)|(incorporated$)|(inc.$)|(inc$)|(company$)|(common$)|(com$)'
 
@@ -60,8 +59,6 @@ class StringCluster(BaseEstimator, TransformerMixin):
         self.threshold = threshold
         self.stop_tokens = re.compile(stop_tokens)
         self.vec = TfidfVectorizer(analyzer='char_wb', ngram_range=(ngram_size, ngram_size))
-        self.similarity_ = None
-        self.labels_ = None
 
     def fit(self, X: Data, y: Optional[Data] = None) -> "StringCluster":
         """
@@ -99,7 +96,8 @@ class StringCluster(BaseEstimator, TransformerMixin):
         pd.Series
             Pandas Series of de-duplicated values.
         """
-        check_is_fitted(X, y)
+        if not hasattr(self, 'labels_'):
+            raise AttributeError(".fit() method must be called before .transform() method.")
         if y:
             return pd.Series(y)[self.labels_].reset_index(drop=True)
         return pd.Series(X)[self.labels_].reset_index(drop=True)
@@ -145,7 +143,7 @@ class StringCluster(BaseEstimator, TransformerMixin):
             An array of similarity scores. If `y` is given, the array will be shape
             n_samples by len(y); if no `y` is given, array will be shape n_samples by n_samples.
         """
-        return np.where(self.similarity_ > self.threshold, 1., self.similarity_).argmax(1)
+        return np.where(self.similarity_ > self.threshold, 1., self.similarity_).argmax(1)  # type: ignore
 
     def _get_cosine_similarity(self, X: Data, y: Optional[Data] = None) -> np.ndarray:
         """Get cosine similarity using fitted TfidfVectorizer and Linear Kernel."""
@@ -154,11 +152,11 @@ class StringCluster(BaseEstimator, TransformerMixin):
         else:
             a, b = self._clean_series(X), self._clean_series(X)
         self.vec.fit(b)
-        return linear_kernel(self.vec.transform(a), self.vec.transform(b))
+        return linear_kernel(self.vec.transform(a), self.vec.transform(b))  # type: ignore
 
     def _clean_series(self, X: Data) -> pd.Series:
         """Clean series of string values."""
-        return pd.Series(X).apply(self._clean_string)
+        return pd.Series(X).apply(self._clean_string)  # type: ignore
 
     def _clean_string(self, string: str) -> str:
         """Remove stop tokens and strip whitespace."""
@@ -167,7 +165,7 @@ class StringCluster(BaseEstimator, TransformerMixin):
 
 def dedupe_companies():
     """Deduplicate a list of publicly traded companies."""
-    series = pd.read_csv('./data/companies.csv')['company']
+    series = pd.read_csv('../data/companies.csv')['company']
     c = StringCluster(ngram_size=2, stop_tokens=STOP_TOKENS)
     labs = c.fit_transform(series)
     return pd.DataFrame({'actual': series.reset_index(drop=True), 'label': labs})
