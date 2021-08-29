@@ -299,8 +299,8 @@ Name: company, dtype: object
 </pre></div>
 </div>
 </section>
-<section id="deduplicating">
-<h3>Deduplicating<a class="headerlink" href="#deduplicating" title="Permalink to this headline">¶</a></h3>
+<section id="de-duplicating">
+<h3>De-duplicating<a class="headerlink" href="#de-duplicating" title="Permalink to this headline">¶</a></h3>
 <p>As mentioned, <code class="docutils literal notranslate"><span class="pre">StringCluster</span></code> can be used with or without a “master” list of string representations, depending on the use case. A master list is provided as the <code class="docutils literal notranslate"><span class="pre">y</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">.fit_transform()</span></code> method. This can be useful if user have a designated set of representations that they wish to group each sample under.</p>
 <section id="without-a-master-list">
 <h4>Without a master list<a class="headerlink" href="#without-a-master-list" title="Permalink to this headline">¶</a></h4>
@@ -327,7 +327,7 @@ Name: company, dtype: object
 </tr>
 </tbody>
 </table></div>
-<p>Although we’re using Tf-Idf vectorization, and common tokens will have less effect, it’s still important to provide a list of domain-specific stop tokens. In this case, we’ll remove special characters, white space and any word that relates to “corporation”, “incorporated”, etc., prior to Tf-Idf vectorization– these variations within a company’s name are meaningless.</p>
+<p>Although we’re using Tf-Idf vectorization, and common tokens will have less effect, we can improve performance by providing a list of domain-specific stop tokens. In this case, we’ll remove special characters, white space and any word that relates to “corporation”, “incorporated”, etc., prior to Tf-Idf vectorization– these variations within a company’s name are meaningless.</p>
 <p>After fitting the <code class="docutils literal notranslate"><span class="pre">StringCluster</span></code> object and transforming the data, we see that all 11 variations of “Facebook” have consolidated to “FACEBOOK INC”.</p>
 <p><strong>Of note: When using <code class="docutils literal notranslate"><span class="pre">StringCluster</span></code> without a master list, the transformer will default to replacing variations of a string representation with the first variation seen– in the case, “FACEBOOK INC”.</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">STOP_TOKENS</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'[\W_]+|(corporation$)|(corp.$)|(corp$)|(incorporated$)|(inc.$)|(inc$)|(company$)|(common$)|(com$)'</span>
@@ -356,7 +356,7 @@ Name: company, dtype: object
 </section>
 <section id="with-a-master-list">
 <h4>With a master list<a class="headerlink" href="#with-a-master-list" title="Permalink to this headline">¶</a></h4>
-<p>Let’s take a look at use with a master list.  As mentioned, the mast list is passed as the <code class="docutils literal notranslate"><span class="pre">y</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">fit_transform()</span></code> methods.  In this case, each string in the series is compared against the master list and replaced with the representation in the master list with which it exhibits the highest cosine similarity.</p>
+<p>Let’s take a look at use with a master list.  As mentioned, the master list is passed as the <code class="docutils literal notranslate"><span class="pre">y</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">fit_transform()</span></code> methods.  In this case, each string in the series is compared against the master list and replaced with the representation in the master list with which it exhibits the highest cosine similarity.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TEST_SERIES</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
         <span class="p">[</span><span class="s1">'Johnson &amp; Johnson, Inc.'</span><span class="p">,</span> <span class="s1">'Johnson &amp; Johnson Inc.'</span><span class="p">,</span> <span class="s1">'Johnson &amp; Johnson Inc'</span><span class="p">,</span>
          <span class="s1">'Johnson &amp; Johnson'</span><span class="p">,</span> <span class="s1">'Intel Corp'</span><span class="p">,</span> <span class="s1">'Intel Corp.'</span><span class="p">,</span> <span class="s1">'Intel Corporation'</span><span class="p">,</span> <span class="s1">'Google'</span><span class="p">,</span>
@@ -561,7 +561,7 @@ Name: company, dtype: object
 <li><a class="reference internal" href="#use">Use</a><ul>
 <li><a class="reference internal" href="#preliminaries">Preliminaries</a></li>
 <li><a class="reference internal" href="#data">Data</a></li>
-<li><a class="reference internal" href="#deduplicating">Deduplicating</a><ul>
+<li><a class="reference internal" href="#de-duplicating">De-duplicating</a><ul>
 <li><a class="reference internal" href="#without-a-master-list">Without a master list</a></li>
 <li><a class="reference internal" href="#with-a-master-list">With a master list</a></li>
 </ul>

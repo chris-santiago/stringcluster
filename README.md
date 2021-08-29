@@ -123,7 +123,7 @@ facebook
 
 
 
-### Deduplicating
+### De-duplicating
 
 As mentioned, `StringCluster` can be used with or without a "master" list of string representations, depending on the use case. A master list is provided as the `y` parameter in the `.fit_transform()` method. This can be useful if user have a designated set of representations that they wish to group each sample under.
 
@@ -137,7 +137,7 @@ Let's first take a look at use **without** a master list.  The `StringCluster` t
 |`threshold`|float|Threshold to determine similarities; must be between [0, 1]; default 0.8.|
 |`stop_tokens`|str|RegEx pattern to remove during tokenization; default `r'[\W_]+'`|
 
-Although we're using Tf-Idf vectorization, and common tokens will have less effect, it's still important to provide a list of domain-specific stop tokens. In this case, we'll remove special characters, white space and any word that relates to "corporation", "incorporated", etc., prior to Tf-Idf vectorization-- these variations within a company's name are meaningless.
+Although we're using Tf-Idf vectorization, and common tokens will have less effect, we can improve performance by providing a list of domain-specific stop tokens. In this case, we'll remove special characters, white space and any word that relates to "corporation", "incorporated", etc., prior to Tf-Idf vectorization-- these variations within a company's name are meaningless.
 
 After fitting the `StringCluster` object and transforming the data, we see that all 11 variations of "Facebook" have consolidated to "FACEBOOK INC". 
 
@@ -176,7 +176,7 @@ labels[facebook.index]
 
 #### With a master list
 
-Let's take a look at use with a master list.  As mentioned, the mast list is passed as the `y` parameter in the `.fit()` and `fit_transform()` methods.  In this case, each string in the series is compared against the master list and replaced with the representation in the master list with which it exhibits the highest cosine similarity.
+Let's take a look at use with a master list.  As mentioned, the master list is passed as the `y` parameter in the `.fit()` and `fit_transform()` methods.  In this case, each string in the series is compared against the master list and replaced with the representation in the master list with which it exhibits the highest cosine similarity.
 
 
 ```python
