@@ -1,7 +1,6 @@
 # string-cluster
 [![Build Status](https://app.travis-ci.com/chris-santiago/stringcluster.svg?branch=master)](https://app.travis-ci.com/chris-santiago/stringcluster)
-[![codecov](https://codecov.io/gh/chris-santiago/stringcluster/branch/main/graph/badge.svg?token=X2SqPEfCdZ)](https://codecov.io/gh/chris-santiago/stringcluster)
-
+[![codecov](https://codecov.io/gh/chris-santiago/stringcluster/branch/master/graph/badge.svg?token=X2SqPEfCdZ)](https://codecov.io/gh/chris-santiago/stringcluster)
 ## Install
 
 Create a virtual environment with Python 3.9 and install from git:
